@@ -35,4 +35,27 @@ class UsuarioMapperTest {
         assertEquals( usuario.getUsername(), usuarioDTO.getUsername() );
         assertEquals( usuario.getPassword(), usuarioDTO.getPassword() );
     }
+
+    @Test
+    void shouldMapDtoToUsuario() {
+
+        UsuarioDTO usuarioDTO = UsuarioDTO.builder()
+                        .nombre("Luis")
+                        .apellido("Fernandez")
+                        .dni("36587456")
+                        .email("o9OJ8@example.com")
+                        .username("lfernandez")
+                        .password("abc")
+                        .build();
+
+        Usuario usuario = UsuarioMapper.INSTANCE.usuarioDTOToUsuario(usuarioDTO);
+
+        assertNotNull( usuario );
+        assertEquals( usuarioDTO.getNombre(), usuario.getNombre() );
+        assertEquals( usuarioDTO.getApellido(), usuario.getApellido() );
+        assertEquals( usuarioDTO.getDni(), usuario.getDni() );
+        assertEquals( usuarioDTO.getEmail(), usuario.getEmail() );
+        assertEquals( usuarioDTO.getUsername(), usuario.getUsername() );
+        assertEquals( usuarioDTO.getPassword(), usuario.getPassword() );
+    }
 }
