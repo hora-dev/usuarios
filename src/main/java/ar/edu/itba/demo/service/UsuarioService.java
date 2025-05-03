@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -28,5 +30,14 @@ public class UsuarioService {
         Thread.sleep(5000);
         log.info("usuario guardado: {} ", usuarioGuardado);
         return CompletableFuture.completedFuture(usuarioGuardado);
+    }
+
+    @Transactional
+    public Optional<Usuario> obtenerUsuario(long id) {
+        return usuarioRepository.findById(id);
+    }
+
+    public List<Usuario> obtenerTodosLosUsuarios() {
+        return usuarioRepository.findAll();
     }
 }
