@@ -6,9 +6,11 @@ import ar.edu.itba.demo.model.Usuario;
 import ar.edu.itba.demo.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +36,20 @@ public class UsuarioService {
 
     @Transactional
     public Optional<Usuario> obtenerUsuario(long id) {
+        log.info( "Obteniendo usuario por id: {}", id );
         return usuarioRepository.findById(id);
     }
 
     public List<Usuario> obtenerTodosLosUsuarios() {
+        log.info( "Obteniendo todos los usuarios" );
         return usuarioRepository.findAll();
+    }
+
+    @Transactional
+    public void eliminarUsuario(Long id) {
+        log.info( "Eliminando usuario por id: {}", id );
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow( () -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Usuario id " + id + " no encontrado") );
+        usuarioRepository.delete(u);
     }
 }
