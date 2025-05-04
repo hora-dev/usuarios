@@ -35,7 +35,10 @@ public class UsuarioController {
     public ResponseEntity<?> getUsuarioById(@PathVariable Long id) {
         log.info( "Obteniendo usuario por id: {}", id );
         return usuarioService.obtenerUsuario(id)
-                .map( usuario -> ResponseEntity.ok( usuario ) )
+                .map( usuario -> {
+                    log.info("usuario obtenido: {} ", usuario);
+                    return ResponseEntity.ok( usuario );
+                } )
                 .orElseGet( () -> ResponseEntity.notFound().build() );
     }
 
@@ -51,6 +54,7 @@ public class UsuarioController {
     public ResponseEntity<?> deleteUsuarioById(@PathVariable Long id) {
         log.info( "Eliminando usuario por id: {}", id );
         usuarioService.eliminarUsuario(id);
+        log.info("Usuario eliminado");
         return ResponseEntity.noContent().build();
     }
 }

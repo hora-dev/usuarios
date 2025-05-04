@@ -51,5 +51,6 @@ public class UsuarioService {
         Usuario u = usuarioRepository.findById(id)
                 .orElseThrow( () -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Usuario id " + id + " no encontrado") );
         usuarioRepository.delete(u);
+        log.info( "Usuario eliminado : {}", u );
     }
 }
