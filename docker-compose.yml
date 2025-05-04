@@ -1,0 +1,11 @@
+
+services:
+  usuarios:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: usuarios-itba:latest
+    container_name: usuarios_itba_container
+    ports:
+      - "8008:8008"
+    restart: unless-stopped
