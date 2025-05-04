@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -114,4 +115,24 @@ class UsuarioServiceTest {
         verify( usuarioRepository, times(1) ).findAll();
     }
 
+    @Test
+    void testEliminarUsuarioNoEncontrado() {
+
+        when( usuarioRepository.findById(1L) ).thenReturn( Optional.empty() );
+
+        assertThrows( HttpClientErrorException.class, () -> {
+            usuarioService.eliminarUsuario(1L);
+        } );
+        verify( usuarioRepository, times(1) ).findById(1L   );
+    }
+
+    @Test
+    void testEliminarUsuarioOk() {
+        when( usuarioRepository.findById(1L) ).thenReturn( Optional.of( usuario ) );
+
+        usuarioService.eliminarUsuario(1L);
+
+        verify( usuarioRepository, times(1) ).findById(1L   );
+        verify( usuarioRepository, times(1) ).delete( Mockito.any( Usuario.class ) );
+    }
 }

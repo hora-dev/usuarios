@@ -3,6 +3,7 @@ package ar.edu.itba.demo.controller;
 import ar.edu.itba.demo.dto.UsuarioDTO;
 import ar.edu.itba.demo.model.Usuario;
 import ar.edu.itba.demo.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-@Tag(name = "Usuario CRUD API", description = "CREATE, READ usuario")
+@Tag(name = "Usuario CRUD API", description = "CREATE, READ, DELETE usuario")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/usuarios")
@@ -22,12 +23,14 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    @Operation(summary = "Crear un nuevo usuario")
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) throws InterruptedException, ExecutionException {
         log.info( "Ejecutando guardando usuario: {}", usuarioDTO );
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crearUsuario( usuarioDTO ) );
     }
 
+    @Operation(summary = "Obtener un usuario por id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUsuarioById(@PathVariable Long id) {
         log.info( "Obteniendo usuario por id: {}", id );
@@ -36,10 +39,19 @@ public class UsuarioController {
                 .orElseGet( () -> ResponseEntity.notFound().build() );
     }
 
+    @Operation(summary = "Obtener todos los usuarios")
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         log.info( "Obteniendo todos los usuarios" );
         return ResponseEntity.ok( usuarioService.obtenerTodosLosUsuarios() );
+    }
+
+    @Operation(summary = "Eliminar un usuario por id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUsuarioById(@PathVariable Long id) {
+        log.info( "Eliminando usuario por id: {}", id );
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }
 
