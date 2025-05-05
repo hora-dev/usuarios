@@ -1,5 +1,6 @@
 package ar.edu.itba.demo.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +11,8 @@ public class UsuarioDTO {
     private String apellido;
     private String dni;
     private String email;
+
+    @NotNull
     private String username;
     private String password;
 }
