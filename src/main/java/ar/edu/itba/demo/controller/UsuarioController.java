@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-@Tag(name = "Usuario CRUD API", description = "CREATE, READ, DELETE usuario")
+@Tag(name = "Usuario CRUD API", description = "CREATE, READ, UPDATE, DELETE usuario")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/usuarios")
@@ -64,6 +64,16 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
         log.info("Usuario eliminado");
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Modificar un usuario por id")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> modificarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuarioDTO, BindingResult result) {
+        log.info( "Modificando usuario por id: {}", id );
+        if (result.hasErrors()) {
+            return validar(result);
+        }
+        return ResponseEntity.ok( usuarioService.modificarUsuario(id, usuarioDTO) );
     }
 
     public static ResponseEntity<Map<String, String>> validar(BindingResult result) {

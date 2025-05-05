@@ -135,4 +135,36 @@ class UsuarioServiceTest {
         verify( usuarioRepository, times(1) ).findById(1L   );
         verify( usuarioRepository, times(1) ).delete( Mockito.any( Usuario.class ) );
     }
+
+    @Test
+    void testModificarUsuarioOk() {
+
+        usuarioDTO.setNombre("Horacio");
+        Usuario usuarioModificado = Usuario.builder()
+                .nombre("Horacio")
+                .apellido("Fernandez")
+                .dni("36587456")
+                .email("o9OJ8@example.com")
+                .username("lfernandez")
+                .password("abc")
+                .build();
+
+        when( usuarioRepository.findById(1L) ).thenReturn( Optional.of( usuario ) );
+        when( usuarioRepository.save( Mockito.any( Usuario.class ) ) ).thenReturn( usuarioModificado );
+
+        usuarioModificado = usuarioService.modificarUsuario(1L, usuarioDTO);
+
+        assertNotNull( usuarioModificado );
+        assertEquals( usuarioModificado.getApellido(), usuarioDTO.getApellido() );
+        assertEquals( usuarioModificado.getNombre(), usuarioDTO.getNombre() );
+        assertEquals( usuarioModificado.getDni(), usuarioDTO.getDni() );
+        assertEquals( usuarioModificado.getEmail(), usuarioDTO.getEmail() );
+        assertEquals( usuarioModificado.getUsername(), usuarioDTO.getUsername() );
+        assertEquals( usuarioModificado.getPassword(), usuarioDTO.getPassword() );
+
+        verify( usuarioRepository, times(1) ).findById(1L   );
+        verify( usuarioRepository, times(1) ).save( Mockito.any( Usuario.class ) );
+    }
+
+
 }

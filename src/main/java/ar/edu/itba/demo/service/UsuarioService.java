@@ -53,4 +53,19 @@ public class UsuarioService {
         usuarioRepository.delete(u);
         log.info( "Usuario eliminado : {}", u );
     }
+
+    @Transactional
+    public Usuario modificarUsuario(long id, UsuarioDTO usuarioDTO) {
+        log.info( "Modificando usuario por id: {}, usuarioDTO: {}", id, usuarioDTO );
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow( () -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Usuario id " + id + " no encontrado") );
+        u.setApellido( usuarioDTO.getApellido() );
+        u.setNombre( usuarioDTO.getNombre() );
+        u.setDni( usuarioDTO.getDni() );
+        u.setEmail( usuarioDTO.getEmail() );
+        u.setUsername( usuarioDTO.getUsername() );
+        u.setPassword( usuarioDTO.getPassword() );
+        log.info( "Usuario modificado : {}", u );
+        return usuarioRepository.save(u);
+    }
 }
