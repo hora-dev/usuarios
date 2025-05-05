@@ -3,7 +3,7 @@
 
 Este es un proyecto basado en Spring Boot 3.4.5, Java 21.0.6, Maven 3.8.7, Docker 26.1.3 y docker-compose 1.29.2 para gestionar usuarios.
 Es requisito tener instalado Java 21 y Maven para ejecutar el proyecto.
-Es requisite tener instalado docker y/o docker-compose para levantar el contenedor.
+Es requisito tener instalado docker y/o docker-compose para levantar el contenedor.
 
 ### Instrucciones de uso:
 
