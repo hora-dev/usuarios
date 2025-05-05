@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,10 @@ class UsuarioControllerTest {
 
     private Usuario usuario;
     private UsuarioDTO usuarioDTO;
+    private UsuarioDTO usuarioDTOUsernameNull;
+
+    @Mock
+    private BindingResult result;
 
     @Mock
     private UsuarioService usuarioService;
@@ -51,6 +57,14 @@ class UsuarioControllerTest {
                 .dni("36587456")
                 .email("o9OJ8@example.com")
                 .username("lfernandez")
+                .password("abc")
+                .build();
+
+        usuarioDTOUsernameNull = UsuarioDTO.builder()
+                .nombre("Luis")
+                .apellido("Fernandez")
+                .dni("36587456")
+                .email("o9OJ8@example.com")
                 .password("abc")
                 .build();
 
@@ -111,7 +125,7 @@ class UsuarioControllerTest {
 
         when( usuarioService.crearUsuario( usuarioDTO ) ).thenReturn( CompletableFuture.completedFuture( usuario ) );
 
-        ResponseEntity<?> response = usuarioController.crearUsuario( usuarioDTO );
+        ResponseEntity<?> response = usuarioController.crearUsuario( usuarioDTO, result );
 
         assertNotNull( response );
         assertEquals(HttpStatus.CREATED, response.getStatusCode() );
@@ -134,5 +148,17 @@ class UsuarioControllerTest {
         assertNotNull( response );
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode() );
         verify( usuarioService, times(1) ).eliminarUsuario(1L);
+    }
+
+    @Test
+    void crearUsuarioNotOk_username_null() throws InterruptedException, ExecutionException {
+
+        when( result.hasErrors() ).thenReturn( true );
+        when ( result.getFieldErrors() ).thenReturn( List.of( new FieldError( "username", "username", "El campo username no debe ser nulo" ) ) );
+
+        ResponseEntity<?> response = usuarioController.crearUsuario( usuarioDTOUsernameNull, result );
+
+        assertNotNull( response );
+        assertEquals( HttpStatus.BAD_REQUEST, response.getStatusCode() );
     }
 }
