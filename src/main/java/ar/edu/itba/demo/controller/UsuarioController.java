@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 @Tag(name = "Usuario CRUD API", description = "CREATE, READ, UPDATE, DELETE usuario")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/usuarios")
+@RequestMapping("api/usuarios")
 @Slf4j
 public class UsuarioController {
 

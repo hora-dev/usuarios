@@ -12,3 +12,10 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+  security:
+    csrf:
+      enabled: false
+
+jwt:
+  secret: BLWi9XeoH5L49SXR9UrkqtEgoPPwCHyjfNa5h7J5euiAKip1Ik
